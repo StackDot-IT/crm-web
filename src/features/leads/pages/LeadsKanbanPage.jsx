@@ -927,7 +927,7 @@ const LeadsKanbanPage = () => {
               className="flex-1 overflow-x-auto overflow-y-hidden custom-scrollbar"
               style={{ WebkitOverflowScrolling: 'touch' }}
             >
-              <div className="flex gap-3 sm:gap-4 md:gap-5 p-3 sm:p-4 md:p-6 h-full items-stretch min-w-max">
+              <div className="flex gap-2.5 sm:gap-3 md:gap-3.5 p-2.5 sm:p-3 md:p-4 h-full items-stretch min-w-max">
                 {loading && Object.keys(columns).length === 0 ? (
                   // Initial skeleton
                   [...Array(3)].map((_, i) => (

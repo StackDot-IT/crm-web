@@ -46,7 +46,7 @@ const KanbanColumn = memo(({ stage, leads, loading, isRefetching, isFiltered, on
   const columnBudgetSum = useMemo(() => leads.reduce((sum, l) => sum + (Number(l.budget) || 0), 0), [leads]);
 
   return (
-    <div className="flex flex-col w-[76vw] xs:w-[72vw] sm:w-[272px] md:w-[288px] flex-shrink-0 h-full">
+    <div className="flex flex-col w-[76vw] xs:w-[72vw] sm:w-[264px] md:w-[276px] flex-shrink-0 h-full">
 
       {/* Column header */}
       <div className="flex items-center justify-between mb-3 px-0.5 shrink-0">

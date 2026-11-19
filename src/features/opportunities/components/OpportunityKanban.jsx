@@ -48,33 +48,33 @@ const KanbanColumn = ({ stage, opportunities, onCardClick }) => {
   return (
     <div
       ref={setNodeRef}
-      className={`flex-shrink-0 w-[288px] rounded-lg bg-slate-50 border p-3.5 transition-all flex flex-col snap-start ${
-        isOver ? 'border-orange-400 bg-orange-50/30 ring-1 ring-orange-200' : 'border-slate-200'
+      className={`flex-shrink-0 w-[280px] rounded-xl bg-slate-50/70 border p-2.5 transition-all flex flex-col snap-start ${
+        isOver ? 'border-primary bg-primary/5 ring-1 ring-primary/20' : 'border-slate-200/90'
       }`}
     >
       {/* Column Header */}
-      <div className="flex items-center justify-between mb-3 pb-2.5 border-b border-slate-200">
-        <div className="flex items-center gap-2">
+      <div className="flex items-center justify-between mb-2 pb-2 border-b border-slate-200/80">
+        <div className="flex items-center gap-1.5 min-w-0">
           <span
-            className="w-2.5 h-2.5 rounded-full shrink-0"
+            className="w-2 h-2 rounded-full shrink-0"
             style={{ backgroundColor: stage.colorCode || '#6366f1' }}
           />
-          <h3 className="font-semibold text-slate-800 text-sm">{stage.name}</h3>
+          <h3 className="font-semibold text-slate-800 text-xs tracking-tight truncate">{stage.name}</h3>
           {(stage.stageType === 'WON' || stage.code === 'WON' || stage.name?.toLowerCase() === 'closure') && (
-            <span className="text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-200 shrink-0" title="Opportunities moved to this stage are marked as Won">
+            <span className="text-[9px] font-bold uppercase tracking-wider px-1 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-200 shrink-0" title="Opportunities moved to this stage are marked as Won">
               Won
             </span>
           )}
-          <span className="text-xs font-semibold px-2 py-0.5 rounded-md bg-slate-200/70 text-slate-700">
+          <span className="text-[11px] font-bold px-1.5 py-0.2 rounded-full bg-slate-200/80 text-slate-700 shrink-0">
             {opportunities.length}
           </span>
         </div>
       </div>
 
       {/* Column Total Value */}
-      <div className="text-xs text-slate-500 mb-3 flex items-center justify-between">
-        <span>Total Value:</span>
-        <span className="font-semibold text-slate-900">
+      <div className="text-[11px] text-slate-500 mb-2.5 px-0.5 flex items-center justify-between">
+        <span className="text-slate-400 font-medium">Total:</span>
+        <span className="font-semibold text-slate-800 font-mono">
           ₹{totalRevenue.toLocaleString('en-IN')}
         </span>
       </div>
@@ -288,7 +288,7 @@ export const OpportunityKanban = ({
       onDragMove={handleDragMove}
       onDragEnd={handleDragEnd}
     >
-      <div ref={scrollContainerRef} className="flex gap-4 overflow-x-auto pb-6 pt-2 snap-x">
+      <div ref={scrollContainerRef} className="flex gap-2.5 overflow-x-auto pb-5 pt-1.5 snap-x">
         {activeStages.map((stage) => {
           const stageOpportunities = opportunities.filter((opp) => {
             const colType = (stage.stageType || stage.code || '').toUpperCase();

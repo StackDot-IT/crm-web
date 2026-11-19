@@ -1,7 +1,8 @@
 import { memo, useState, useRef, useEffect, useCallback } from 'react';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { Phone, Calendar, BookOpen, User, MoreVertical, Pencil, Trash2, Lock, Target } from 'lucide-react';
+import { Phone, Calendar, BookOpen, User, MoreVertical, Pencil, Trash2, Lock, Target, Copy, Check } from 'lucide-react';
+import { toast } from 'sonner';
 
 const LeadCard = memo(({ lead, stageId, stageName, isTerminal = false, onClick, canManage = false, onEdit, onDelete }) => {
   const sortableId = `card-${lead.id}`;
@@ -32,8 +33,23 @@ const LeadCard = memo(({ lead, stageId, stageName, isTerminal = false, onClick, 
   };
 
   const [menuOpen, setMenuOpen] = useState(false);
+  const [copied, setCopied] = useState(false);
   const menuRef = useRef(null);
   const triggerRef = useRef(null);
+
+  const fullIdString = lead.leadNumber || `#${lead.id}`;
+  const shortIdDisplay = lead.leadNumber
+    ? `#${lead.leadNumber.split('-').pop()}`
+    : `#${lead.id}`;
+
+  const handleCopyId = useCallback((e) => {
+    e.stopPropagation();
+    e.preventDefault();
+    navigator.clipboard.writeText(fullIdString);
+    setCopied(true);
+    toast.success(`Copied ${fullIdString}`);
+    setTimeout(() => setCopied(false), 1500);
+  }, [fullIdString]);
 
   useEffect(() => {
     if (!menuOpen) return;
@@ -171,46 +187,60 @@ const LeadCard = memo(({ lead, stageId, stageName, isTerminal = false, onClick, 
       )}
 
       {/* Body */}
-      <div className="px-3.5 pt-3 pb-3">
+      <div className="px-3 pt-2.5 pb-2.5">
 
-        {/* Name & Lead ID */}
+        {/* Name & Compact Lead ID */}
         <div
-          className="cursor-pointer pr-5 flex items-center justify-between gap-1.5"
+          className="cursor-pointer pr-5 flex items-center justify-between gap-1.5 min-w-0"
           onClick={(e) => { e.stopPropagation(); onClick?.(); }}
         >
-          <p className="font-semibold text-zinc-900 text-[13.5px] leading-snug tracking-tight truncate group-hover:text-primary transition-colors duration-150">
+          <p
+            className="font-semibold text-zinc-900 text-[13px] leading-snug tracking-tight truncate group-hover:text-primary transition-colors duration-150 flex-1 min-w-0"
+            title={lead.name}
+          >
             {lead.name}
           </p>
+
           {(lead.leadNumber || lead.id) && (
-            <span className="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded bg-zinc-100 text-zinc-600 border border-zinc-200/80 shrink-0">
-              {lead.leadNumber || `#${lead.id}`}
-            </span>
+            <button
+              type="button"
+              onClick={handleCopyId}
+              title={`Click to copy: ${fullIdString}`}
+              className="inline-flex items-center gap-1 text-[10px] font-mono font-medium px-1.5 py-0.5 rounded bg-zinc-100 hover:bg-zinc-200 text-zinc-500 hover:text-zinc-800 border border-zinc-200/80 transition-colors shrink-0 cursor-pointer"
+            >
+              <span>{shortIdDisplay}</span>
+              {copied ? (
+                <Check size={10} className="text-emerald-600 shrink-0" />
+              ) : (
+                <Copy size={9} className="text-zinc-400 shrink-0" />
+              )}
+            </button>
           )}
         </div>
 
-        {/* Badges container: Qualification, Course, Priority & Converted */}
+        {/* Badges container: Course, Priority & Converted */}
         {(interest || priorityBadgeStyle || (lead.opportunities && lead.opportunities.length > 0) || lead.isConverted || lead.qualification) && (
-          <div className="mt-2 flex flex-wrap items-center gap-1.5 pointer-events-none">
+          <div className="mt-1.5 flex flex-wrap items-center gap-1 pointer-events-none">
             {((lead.opportunities && lead.opportunities.length > 0) || lead.isConverted) && (
-              <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md bg-emerald-50 border border-emerald-200 text-[10px] font-bold text-emerald-700">
+              <span className="inline-flex items-center gap-1 px-1.5 py-0.2 rounded bg-emerald-50 border border-emerald-200 text-[9.5px] font-bold text-emerald-700">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
                 CONVERTED
               </span>
             )}
             {lead.qualification?.status === 'QUALIFIED' && !(lead.opportunities?.length > 0 || lead.isConverted) && (
-              <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md bg-emerald-50 border border-emerald-100 text-[9.5px] font-bold text-emerald-600 uppercase tracking-wide shrink-0">
+              <span className="inline-flex items-center gap-1 px-1.5 py-0.2 rounded bg-emerald-50 border border-emerald-100 text-[9px] font-bold text-emerald-600 uppercase tracking-wide shrink-0">
                 <Target size={9} className="shrink-0 text-emerald-500" />
                 Qualified {lead.qualification.score ? `• ${lead.qualification.score}%` : ''}
               </span>
             )}
             {interest && (
-              <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md bg-orange-50 border border-orange-100 text-[10px] font-semibold text-orange-600 truncate max-w-[130px]">
+              <span className="inline-flex items-center gap-1 px-1.5 py-0.2 rounded bg-orange-50 border border-orange-100 text-[9.5px] font-semibold text-orange-600 truncate max-w-[140px]">
                 <BookOpen size={9} className="shrink-0 text-orange-400" />
                 <span className="truncate">{interest}</span>
               </span>
             )}
             {priorityBadgeStyle && (
-              <span className={`inline-flex items-center px-1.5 py-0.5 rounded-md border text-[9.5px] font-bold tracking-wide uppercase shrink-0 ${priorityBadgeStyle}`}>
+              <span className={`inline-flex items-center px-1.5 py-0.2 rounded border text-[9px] font-bold tracking-wide uppercase shrink-0 ${priorityBadgeStyle}`}>
                 {priorityUpper}
               </span>
             )}
@@ -218,16 +248,16 @@ const LeadCard = memo(({ lead, stageId, stageName, isTerminal = false, onClick, 
         )}
 
         {/* Assigned user */}
-        <div className="mt-2.5 flex items-center gap-1.5 pointer-events-none">
+        <div className="mt-2 flex items-center gap-1.5 pointer-events-none">
           <User size={11} className={lead.assignedTo ? 'text-zinc-400' : 'text-zinc-300'} />
-          <span className={`text-[11.5px] truncate ${lead.assignedTo ? 'text-zinc-500 font-medium' : 'text-zinc-300 italic'
+          <span className={`text-[11px] truncate ${lead.assignedTo ? 'text-zinc-500 font-medium' : 'text-zinc-300 italic'
             }`}>
             {lead.assignedTo?.name || 'Unassigned'}
           </span>
         </div>
 
         {/* Divider */}
-        <div className="mt-2.5 mb-2.5 h-px bg-zinc-100" />
+        <div className="mt-2 mb-2 h-px bg-zinc-100" />
 
         {/* Footer */}
         <div className="flex items-center justify-between pointer-events-none">
@@ -240,7 +270,7 @@ const LeadCard = memo(({ lead, stageId, stageName, isTerminal = false, onClick, 
 
           {formattedFollowUp && (
             <div
-              className={`flex items-center gap-1 px-1.5 py-0.5 rounded text-[10.5px] font-medium transition-colors ${isFollowUpOverdue
+              className={`flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-medium transition-colors ${isFollowUpOverdue
                   ? 'bg-rose-50 text-rose-600 font-bold border border-rose-100'
                   : 'text-zinc-500'
                 }`}
