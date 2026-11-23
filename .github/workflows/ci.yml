@@ -18,7 +18,7 @@ concurrency:
 
 env:
   IMAGE: ${{ vars.DOCKERHUB_NAMESPACE || 'jeeejagani' }}/crm-web
-  DEPLOY_PATH: ${{ vars.DEPLOY_PATH || '/home/sddev/stackdot-crm' }}
+  DEPLOY_PATH: ${{ vars.DEPLOY_PATH || '/root/stackdot-crm' }}
 
 jobs:
   build-and-push:
