@@ -1,0 +1,18 @@
+node_modules
+dist
+dist-ssr
+.vite
+*.log
+
+# Build config comes from Dockerfile build args, not local env files
+.env
+.env.*
+
+.git
+.gitignore
+.github
+.dockerignore
+Dockerfile
+*.md
+.vscode
+.idea
