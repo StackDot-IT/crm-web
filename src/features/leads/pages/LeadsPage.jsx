@@ -443,7 +443,10 @@ export const LeadsPage = () => {
 
   // Query leads & drop options
   const { data: leadsData, isLoading, isFetching, isError, error, refetch } = useLeadsQuery(queryParams);
-  const { data: formDataRes, isLoading: isLoadingFormData } = useLeadFormDataQuery();
+  const { data: formDataRes, isLoading: isLoadingFormData } = useLeadFormDataQuery({
+    companyId: filters.companyId || currentUser?.companyId || undefined,
+    branchId: filters.branchId || currentUser?.branchId || undefined,
+  });
   const deleteLeadMutation = useDeleteLeadMutation();
 
   const leads = leadsData?.data?.leads || [];
