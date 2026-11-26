@@ -662,8 +662,8 @@ export const LeadsPage = () => {
       header: 'Source',
       className: 'whitespace-nowrap',
       cell: (row) => (
-        <span className="inline-flex items-center gap-1 text-[12px] font-semibold text-slate-600 bg-slate-100/80 px-2 py-0.5 rounded-lg border border-slate-200/50 whitespace-nowrap">
-          <Compass size={11} className="text-slate-400 shrink-0" />
+        <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-slate-600 bg-slate-100/80 px-2.5 py-0.5 rounded-full border border-slate-200/50 whitespace-nowrap">
+          <Compass size={10} className="text-slate-400 shrink-0" />
           <span className="whitespace-nowrap">{row.source?.name || '—'}</span>
         </span>
       )
@@ -672,8 +672,8 @@ export const LeadsPage = () => {
       header: 'Service',
       className: 'whitespace-nowrap',
       cell: (row) => (
-        <span className="inline-flex items-center gap-1 text-[12px] font-semibold text-slate-600 bg-slate-100/80 px-2 py-0.5 rounded-lg border border-slate-200/50 whitespace-nowrap">
-          <Award size={11} className="text-slate-400 shrink-0" />
+        <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-slate-600 bg-slate-100/80 px-2.5 py-0.5 rounded-full border border-slate-200/50 whitespace-nowrap">
+          <Award size={10} className="text-slate-400 shrink-0" />
           <span className="whitespace-nowrap">{row.course?.name || '—'}</span>
         </span>
       )
@@ -684,33 +684,10 @@ export const LeadsPage = () => {
       accessorKey: 'budget',
       className: 'whitespace-nowrap',
       cell: (row) => (
-        <span className="inline-flex items-center text-[12px] font-bold font-mono text-emerald-600 bg-emerald-50/70 border border-emerald-200/60 px-2 py-0.5 rounded-lg whitespace-nowrap">
+        <span className="inline-flex items-center text-[11px] font-bold font-mono text-emerald-600 bg-emerald-50/70 border border-emerald-200/60 px-2.5 py-0.5 rounded-full whitespace-nowrap">
           {row.budget ? formatCurrency(row.budget) : '—'}
         </span>
       )
-    },
-    {
-      header: 'Kanban Stage',
-      sortable: true,
-      accessorKey: 'stageId',
-      className: 'whitespace-nowrap',
-      cell: (row) => {
-        if (!row.stage) return <span className="text-slate-400 text-[12px] whitespace-nowrap">—</span>;
-        const color = row.stage.colorCode || '#474ce1';
-        return (
-          <span
-            className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold border whitespace-nowrap"
-            style={{
-              backgroundColor: `${color}14`,
-              color: color,
-              borderColor: `${color}35`
-            }}
-          >
-            <Tag size={10} className="shrink-0" />
-            <span>{row.stage.name}</span>
-          </span>
-        );
-      }
     },
     {
       header: 'Status',
@@ -724,7 +701,7 @@ export const LeadsPage = () => {
             </span>
           );
         }
-        if (!row.status) return <span className="text-slate-400 text-[12px] whitespace-nowrap">—</span>;
+        if (!row.status) return <span className="text-slate-400 text-[11px] whitespace-nowrap">—</span>;
         return (
           <span
             className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold border whitespace-nowrap"
@@ -736,6 +713,34 @@ export const LeadsPage = () => {
           >
             <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: row.status.displayColor }} />
             {row.status.name}
+          </span>
+        );
+      }
+    },
+    {
+      header: 'Opportunity Stage',
+      className: 'whitespace-nowrap',
+      cell: (row) => {
+        const isConverted = (row.opportunities && row.opportunities.length > 0) || row.isConverted;
+        const opp = row.opportunities?.[0];
+        const oppStage = opp?.stage;
+
+        if (!isConverted || !oppStage) {
+          return <span className="text-slate-400 text-[11px] whitespace-nowrap">—</span>;
+        }
+
+        const color = oppStage.colorCode || '#6366f1';
+        return (
+          <span
+            className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold border whitespace-nowrap"
+            style={{
+              backgroundColor: `${color}14`,
+              color: color,
+              borderColor: `${color}35`
+            }}
+          >
+            <Tag size={10} className="shrink-0" />
+            <span>{oppStage.name}</span>
           </span>
         );
       }
@@ -1087,6 +1092,7 @@ export const LeadsPage = () => {
               : "Manually add a lead or import them from Excel to get started."
           }
           rowClassName="group"
+          striped={true}
           sortBy={sortBy}
           sortOrder={sortOrder}
           onSort={toggleSort}

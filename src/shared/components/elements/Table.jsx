@@ -23,6 +23,7 @@ const Table = ({
   sortBy,
   sortOrder,
   onSort,
+  striped = false,
 }) => {
   const isLoading = loadingState === 'loading';
   const isError = loadingState === 'error';
@@ -38,7 +39,7 @@ const Table = ({
   const DesktopSkeletons = () => (
     <>
       {[...Array(skeletonRows)].map((_, rowIndex) => (
-        <tr key={rowIndex} className="border-b border-slate-100 last:border-0">
+        <tr key={rowIndex} className="border-b border-slate-200 last:border-0">
           {columns.map((col, colIndex) => {
             const alignmentClass =
               col.align === 'center'
@@ -145,7 +146,7 @@ const Table = ({
       <div className="overflow-x-auto scrollbar-hide relative">
         <table className="w-full text-left border-collapse">
           <thead>
-            <tr className="bg-slate-50/70 border-b border-slate-200/60">
+            <tr className="bg-slate-50/70 border-b border-slate-200">
               {columns.map((col, index) => {
                 const alignmentClass =
                   col.align === 'center'
@@ -185,37 +186,41 @@ const Table = ({
             {isLoading && <DesktopSkeletons />}
             {!isLoading && isError && <ErrorState />}
             {!isLoading && !isError && isEmpty && <EmptyState />}
-            {!isLoading && !isError && !isEmpty && data.map((row, rowIndex) => (
-              <tr
-                key={row.id || rowIndex}
-                className={`hover:bg-slate-50/60 transition-all duration-150 group ${rowClassName}`}
-              >
-                {columns.map((col, colIndex) => {
-                  const alignmentClass =
-                    col.align === 'center'
-                      ? 'text-center'
-                      : col.align === 'right'
-                        ? 'text-right'
-                        : 'text-left';
+            {!isLoading && !isError && !isEmpty && data.map((row, rowIndex) => {
+              const isEven = rowIndex % 2 === 1;
+              const stripedBg = striped && isEven ? 'bg-slate-50/50' : 'bg-white';
+              return (
+                <tr
+                  key={row.id || rowIndex}
+                  className={`${stripedBg} hover:bg-slate-100/70 transition-all duration-150 group ${rowClassName}`}
+                >
+                  {columns.map((col, colIndex) => {
+                    const alignmentClass =
+                      col.align === 'center'
+                        ? 'text-center'
+                        : col.align === 'right'
+                          ? 'text-right'
+                          : 'text-left';
 
-                  const isAction = isActionColumn(col);
-                  const stickyClass = isAction
-                    ? 'sticky right-0 z-10 bg-white group-hover:bg-[#F8FAFC] transition-colors'
-                    : '';
+                    const isAction = isActionColumn(col);
+                    const stickyClass = isAction
+                      ? `sticky right-0 z-10 ${striped && isEven ? 'bg-[#F8FAFC] group-hover:bg-[#F1F5F9]' : 'bg-white group-hover:bg-[#F8FAFC]'} transition-colors`
+                      : '';
 
-                  const cellValue = col.accessorKey ? row[col.accessorKey] : undefined;
+                    const cellValue = col.accessorKey ? row[col.accessorKey] : undefined;
 
-                  return (
-                    <td
-                      key={colIndex}
-                      className={`py-3.5 px-6 text-[13px] text-slate-600 font-sans ${alignmentClass} ${stickyClass} ${col.className || ''}`}
-                    >
-                      {col.cell ? col.cell(row, rowIndex) : cellValue ?? ''}
-                    </td>
-                  );
-                })}
-              </tr>
-            ))}
+                    return (
+                      <td
+                        key={colIndex}
+                        className={`py-3.5 px-6 text-[13px] text-slate-600 font-sans ${alignmentClass} ${stickyClass} ${col.className || ''}`}
+                      >
+                        {col.cell ? col.cell(row, rowIndex) : cellValue ?? ''}
+                      </td>
+                    );
+                  })}
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </div>

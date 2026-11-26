@@ -573,11 +573,11 @@ export const OpportunitiesPage = () => {
       prev.map((opp) =>
         Number(opp.id) === Number(closingOpportunity.id)
           ? {
-              ...opp,
-              status: closeOutcome,
-              stageId: targetStageId,
-              stage: targetStageObj || opp.stage,
-            }
+            ...opp,
+            status: closeOutcome,
+            stageId: targetStageId,
+            stage: targetStageObj || opp.stage,
+          }
           : opp
       )
     );
@@ -709,11 +709,10 @@ export const OpportunitiesPage = () => {
           <button
             type="button"
             onClick={() => setScope('all')}
-            className={`pb-3 font-semibold text-sm transition-colors flex items-center gap-2 cursor-pointer ${
-              scope === 'all'
-                ? 'text-orange-600 border-b-2 border-orange-600'
-                : 'text-slate-500 hover:text-slate-700 border-b-2 border-transparent'
-            }`}
+            className={`pb-3 font-semibold text-sm transition-colors flex items-center gap-2 cursor-pointer ${scope === 'all'
+              ? 'text-orange-600 border-b-2 border-orange-600'
+              : 'text-slate-500 hover:text-slate-700 border-b-2 border-transparent'
+              }`}
           >
             <Layers size={16} /> All
           </button>
@@ -724,11 +723,10 @@ export const OpportunitiesPage = () => {
             setScope('mine');
             setUserFilter('');
           }}
-          className={`pb-3 font-semibold text-sm transition-colors flex items-center gap-2 cursor-pointer ${
-            scope === 'mine'
-              ? 'text-orange-600 border-b-2 border-orange-600'
-              : 'text-slate-500 hover:text-slate-700 border-b-2 border-transparent'
-          }`}
+          className={`pb-3 font-semibold text-sm transition-colors flex items-center gap-2 cursor-pointer ${scope === 'mine'
+            ? 'text-orange-600 border-b-2 border-orange-600'
+            : 'text-slate-500 hover:text-slate-700 border-b-2 border-transparent'
+            }`}
         >
           <UserCheck size={16} /> Mine
         </button>
@@ -861,18 +859,16 @@ export const OpportunitiesPage = () => {
               <button
                 type="button"
                 onClick={() => setViewMode('kanban')}
-                className={`flex items-center gap-1.5 px-3 py-1 rounded-md text-xs font-bold transition-all h-[28px] cursor-pointer ${
-                  viewMode === 'kanban' ? 'bg-white text-orange-600 border border-slate-200/80 shadow-xs' : 'text-slate-500 hover:text-slate-800'
-                }`}
+                className={`flex items-center gap-1.5 px-3 py-1 rounded-md text-xs font-bold transition-all h-[28px] cursor-pointer ${viewMode === 'kanban' ? 'bg-white text-orange-600 border border-slate-200/80 shadow-xs' : 'text-slate-500 hover:text-slate-800'
+                  }`}
               >
                 <LayoutGrid className="w-3.5 h-3.5" /> Kanban
               </button>
               <button
                 type="button"
                 onClick={() => setViewMode('spreadsheet')}
-                className={`flex items-center gap-1.5 px-3 py-1 rounded-md text-xs font-bold transition-all h-[28px] cursor-pointer ${
-                  viewMode === 'spreadsheet' ? 'bg-white text-orange-600 border border-slate-200/80 shadow-xs' : 'text-slate-500 hover:text-slate-800'
-                }`}
+                className={`flex items-center gap-1.5 px-3 py-1 rounded-md text-xs font-bold transition-all h-[28px] cursor-pointer ${viewMode === 'spreadsheet' ? 'bg-white text-orange-600 border border-slate-200/80 shadow-xs' : 'text-slate-500 hover:text-slate-800'
+                  }`}
               >
                 <TableIcon className="w-3.5 h-3.5" /> Table
               </button>
@@ -1061,11 +1057,10 @@ export const OpportunitiesPage = () => {
                 <button
                   type="button"
                   onClick={() => setCloseOutcome('WON')}
-                  className={`p-3 rounded-md border text-center transition-all cursor-pointer flex flex-col items-center gap-1 text-xs font-bold ${
-                    closeOutcome === 'WON'
-                      ? 'bg-emerald-600 text-white border-emerald-600 shadow-sm ring-2 ring-emerald-200'
-                      : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'
-                  }`}
+                  className={`p-3 rounded-md border text-center transition-all cursor-pointer flex flex-col items-center gap-1 text-xs font-bold ${closeOutcome === 'WON'
+                    ? 'bg-emerald-600 text-white border-emerald-600 shadow-sm ring-2 ring-emerald-200'
+                    : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'
+                    }`}
                 >
                   <CheckCircle2 className="w-4 h-4" />
                   <span>CLOSURE</span>
@@ -1074,11 +1069,10 @@ export const OpportunitiesPage = () => {
                 <button
                   type="button"
                   onClick={() => setCloseOutcome('LOST')}
-                  className={`p-3 rounded-md border text-center transition-all cursor-pointer flex flex-col items-center gap-1 text-xs font-bold ${
-                    closeOutcome === 'LOST'
-                      ? 'bg-rose-600 text-white border-rose-600 shadow-sm ring-2 ring-rose-200'
-                      : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'
-                  }`}
+                  className={`p-3 rounded-md border text-center transition-all cursor-pointer flex flex-col items-center gap-1 text-xs font-bold ${closeOutcome === 'LOST'
+                    ? 'bg-rose-600 text-white border-rose-600 shadow-sm ring-2 ring-rose-200'
+                    : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'
+                    }`}
                 >
                   <XCircle className="w-4 h-4" />
                   <span>CLOSED LOST</span>
@@ -1087,11 +1081,10 @@ export const OpportunitiesPage = () => {
                 <button
                   type="button"
                   onClick={() => setCloseOutcome('CANCELLED')}
-                  className={`p-3 rounded-md border text-center transition-all cursor-pointer flex flex-col items-center gap-1 text-xs font-bold ${
-                    closeOutcome === 'CANCELLED'
-                      ? 'bg-slate-800 text-white border-slate-800 shadow-sm ring-2 ring-slate-300'
-                      : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'
-                  }`}
+                  className={`p-3 rounded-md border text-center transition-all cursor-pointer flex flex-col items-center gap-1 text-xs font-bold ${closeOutcome === 'CANCELLED'
+                    ? 'bg-slate-800 text-white border-slate-800 shadow-sm ring-2 ring-slate-300'
+                    : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'
+                    }`}
                 >
                   <Activity className="w-4 h-4" />
                   <span>CANCELLED</span>
@@ -1129,13 +1122,12 @@ export const OpportunitiesPage = () => {
                 type="button"
                 disabled={closeMutation.isPending}
                 onClick={() => handleConfirmClose(null, closeRemarks)}
-                className={`px-4 py-2 text-xs font-bold text-white rounded-md shadow-xs transition-colors cursor-pointer flex items-center gap-2 disabled:opacity-60 ${
-                  closeOutcome === 'WON'
-                    ? 'bg-emerald-600 hover:bg-emerald-700'
-                    : closeOutcome === 'LOST'
+                className={`px-4 py-2 text-xs font-bold text-white rounded-md shadow-xs transition-colors cursor-pointer flex items-center gap-2 disabled:opacity-60 ${closeOutcome === 'WON'
+                  ? 'bg-emerald-600 hover:bg-emerald-700'
+                  : closeOutcome === 'LOST'
                     ? 'bg-rose-600 hover:bg-rose-700'
                     : 'bg-slate-800 hover:bg-slate-900'
-                }`}
+                  }`}
               >
                 {closeMutation.isPending ? (
                   <>

@@ -88,13 +88,13 @@ const BaseLayout = () => {
         </div>
 
         {/* Footer */}
-        <footer className="min-h-[44px] border-t border-zinc-200/70 bg-white/60 backdrop-blur-sm px-4 sm:px-6 py-2.5 flex flex-wrap items-center justify-between gap-2 text-[11px] text-zinc-400 font-medium tracking-wide shrink-0">
+        {/* <footer className="min-h-[44px] border-t border-zinc-200/70 bg-white/60 backdrop-blur-sm px-4 sm:px-6 py-2.5 flex flex-wrap items-center justify-between gap-2 text-[11px] text-zinc-400 font-medium tracking-wide shrink-0">
           <p className="whitespace-nowrap">&copy; 2026 StackCode Training Institute. All rights reserved.</p>
           <div className="flex gap-4">
             <span className="hover:text-primary cursor-pointer transition-colors whitespace-nowrap">Privacy Policy</span>
             <span className="hover:text-primary cursor-pointer transition-colors whitespace-nowrap">Terms of Service</span>
           </div>
-        </footer>
+        </footer> */}
       </div>
     </div>
   );
