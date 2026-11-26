@@ -568,8 +568,9 @@ export const LeadsPage = () => {
   const columns = [
     {
       header: (() => {
-        const unassignedLeads = leads.filter(l => !l.assignedToId && !l.teamId);
-        const isAllSelected = unassignedLeads.length > 0 && unassignedLeads.every(l => selectedLeadIds.includes(l.id));
+        const canReassign = hasPermission('LEAD_ASSIGNMENT', 'canCreate') || hasPermission('LEAD_ASSIGNMENT', 'canEdit');
+        const selectableLeads = canReassign ? leads : leads.filter(l => !l.assignedToId && !l.teamId);
+        const isAllSelected = selectableLeads.length > 0 && selectableLeads.every(l => selectedLeadIds.includes(l.id));
         const isSomeSelected = selectedLeadIds.length > 0 && !isAllSelected;
         return (
           <Checkbox
@@ -577,7 +578,7 @@ export const LeadsPage = () => {
             indeterminate={isSomeSelected}
             onChange={(checked) => {
               if (checked) {
-                setSelectedLeadIds(unassignedLeads.map(l => l.id));
+                setSelectedLeadIds(selectableLeads.map(l => l.id));
               } else {
                 setSelectedLeadIds([]);
               }
@@ -587,12 +588,14 @@ export const LeadsPage = () => {
         );
       })(),
       cell: (row) => {
+        const canReassign = hasPermission('LEAD_ASSIGNMENT', 'canCreate') || hasPermission('LEAD_ASSIGNMENT', 'canEdit');
         const isAssigned = !!row.assignedToId || !!row.teamId;
+        const isDisabled = isAssigned && !canReassign;
         return (
           <Checkbox
             id={`lead-select-${row.id}`}
             checked={selectedLeadIds.includes(row.id)}
-            disabled={isAssigned}
+            disabled={isDisabled}
             onChange={(checked) => {
               if (checked) {
                 setSelectedLeadIds(prev => [...prev, row.id]);
