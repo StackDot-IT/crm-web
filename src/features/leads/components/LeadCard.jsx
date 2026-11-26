@@ -38,6 +38,7 @@ const LeadCard = memo(({ lead, stageId, stageName, isTerminal = false, onClick, 
   const triggerRef = useRef(null);
 
   const fullIdString = lead.leadNumber || `#${lead.id}`;
+  // Display only the short sequence (e.g. #6687) to keep the card title spacious
   const shortIdDisplay = lead.leadNumber
     ? `#${lead.leadNumber.split('-').pop()}`
     : `#${lead.id}`;

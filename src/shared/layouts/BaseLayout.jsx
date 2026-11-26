@@ -79,7 +79,7 @@ const BaseLayout = () => {
               }`}
           >
             <div
-              className={`mx-auto h-full ${isFullWidthPage ? 'max-w-none' : 'max-w-7xl'
+              className={`mx-auto h-full ${isFullWidthPage ? 'max-w-none' : 'max-w-[2000px]'
                 } animate-in fade-in slide-in-from-bottom-4 duration-500`}
             >
               <Outlet />

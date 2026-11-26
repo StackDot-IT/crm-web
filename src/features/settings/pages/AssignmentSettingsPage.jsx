@@ -195,7 +195,7 @@ export const AssignmentSettingsPage = () => {
   const currentAlgorithmConfig = ALGORITHM_CONFIGS.find(a => a.id === assignmentAlgorithm) || ALGORITHM_CONFIGS[0];
 
   return (
-    <div className="max-w-7xl mx-auto space-y-6 pb-12 animate-in fade-in duration-300">
+    <div className="max-w-7xl mx-auto space-y-4 pb-12 animate-in fade-in duration-300">
 
       {/* ── UNIFORM PAGE HEADER ── */}
       <PageHeader
@@ -206,7 +206,7 @@ export const AssignmentSettingsPage = () => {
 
       {/* ── SCOPE SELECTORS CARD (Super Admin & Company Admin) ── */}
       {(isSuperAdmin || isCompanyAdmin) && (
-        <div className="bg-white border border-slate-200 p-5 space-y-4 shadow-sm">
+        <div className="bg-white border border-slate-200 p-5 space-y-4 ">
           <div className="flex items-center justify-between pb-3 border-b border-slate-100">
             <div className="flex items-center gap-2">
               <Layers size={16} className="text-orange-500" />
@@ -256,7 +256,7 @@ export const AssignmentSettingsPage = () => {
       {/* ── SETTINGS FORM & CONFIGURATION ── */}
       {activeBranchId ? (
         isLoadingDetails ? (
-          <div className="space-y-6 animate-in fade-in duration-300">
+          <div className="space-y-4 animate-in fade-in duration-300">
             {/* Quick Stats Strip Skeleton */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
               {[1, 2, 3, 4].map((i) => (
@@ -271,7 +271,7 @@ export const AssignmentSettingsPage = () => {
             </div>
 
             {/* Main Settings Card Skeleton */}
-            <div className="bg-white border border-slate-200 p-6 space-y-6">
+            <div className="bg-white border border-slate-200 p-6 space-y-4">
               <div className="pb-4 border-b border-slate-100 flex items-center justify-between">
                 <div className="space-y-1.5">
                   <Skeleton variant="text" width={200} height={24} />
@@ -291,7 +291,7 @@ export const AssignmentSettingsPage = () => {
             </div>
           </div>
         ) : (
-          <form onSubmit={handleSave} className="space-y-6" noValidate>
+          <form onSubmit={handleSave} className="space-y-4" noValidate>
 
             {/* Branch Health & Quick Stats Strip */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
@@ -355,8 +355,8 @@ export const AssignmentSettingsPage = () => {
 
             {/* Master Activation Banner */}
             <div className={`border p-6 transition-all duration-200 ${autoAssignmentEnabled
-                ? 'bg-gradient-to-r from-emerald-50/70 via-white to-white border-emerald-200 shadow-sm'
-                : 'bg-white border-slate-200 shadow-sm'
+                ? 'bg-gradient-to-r from-emerald-50/70 via-white to-white border-emerald-200 '
+                : 'bg-white border-slate-200 '
               }`}>
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div className="space-y-1">
@@ -388,10 +388,10 @@ export const AssignmentSettingsPage = () => {
             </div>
 
             {/* Child Settings Wrapper */}
-            <div className={`space-y-6 transition-all duration-300 ${!autoAssignmentEnabled ? 'opacity-50 pointer-events-none filter grayscale-[20%]' : ''}`}>
+            <div className={`space-y-4 transition-all duration-300 ${!autoAssignmentEnabled ? 'opacity-50 pointer-events-none filter grayscale-[20%]' : ''}`}>
 
               {/* ── CARD 1: DAILY LEAD CAPACITY (LIMITS) ── */}
-              <div className="bg-white border border-slate-200 p-6 shadow-sm space-y-4">
+              <div className="bg-white border border-slate-200 p-6  space-y-4">
                 <div className="flex items-start justify-between pb-3 border-b border-slate-100">
                   <div className="flex items-center gap-2.5">
                     <div className="p-2 bg-slate-100 text-slate-700 border border-slate-200">
@@ -456,7 +456,7 @@ export const AssignmentSettingsPage = () => {
               </div>
 
               {/* ── CARD 2: ASSIGNMENT ALGORITHM SELECTION ── */}
-              <div className="bg-white border border-slate-200 p-6 shadow-sm space-y-5">
+              <div className="bg-white border border-slate-200 p-6  space-y-5">
                 <div className="flex items-start justify-between pb-3 border-b border-slate-100">
                   <div className="flex items-center gap-2.5">
                     <div className="p-2 bg-slate-100 text-slate-700 border border-slate-200">
@@ -552,7 +552,7 @@ export const AssignmentSettingsPage = () => {
               </div>
 
               {/* ── CARD 3: TARGET RESOLUTION LEVEL ── */}
-              <div className="bg-white border border-slate-200 p-6 shadow-sm space-y-4">
+              <div className="bg-white border border-slate-200 p-6  space-y-4">
                 <div className="flex items-start justify-between pb-3 border-b border-slate-100">
                   <div className="flex items-center gap-2.5">
                     <div className="p-2 bg-slate-100 text-slate-700 border border-slate-200">
@@ -619,7 +619,7 @@ export const AssignmentSettingsPage = () => {
             </div>
 
             {/* ── STICKY/BOTTOM SAVE ACTION BAR ── */}
-            <div className="bg-white border border-slate-200 p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 shadow-sm">
+            <div className="bg-white border border-slate-200 p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 ">
               <div className="flex items-center gap-2 text-xs text-slate-500">
                 <CheckCircle2 size={15} className="text-emerald-500 shrink-0" />
                 <span>Saved parameters immediately take effect for all subsequent incoming leads.</span>

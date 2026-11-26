@@ -7,6 +7,7 @@ import {
   Eye,
   Pencil,
   Trash2,
+  Tag,
   Kanban,
   SearchX,
   User,
@@ -169,7 +170,7 @@ export const LeadsPage = () => {
   const location = useLocation();
   const { user: currentUser, hasPermission } = useAuth();
   const { forceHideLoader } = useLoader();
-  const { formatDate } = useFormatters();
+  const { formatDate, formatCurrency } = useFormatters();
 
   // Overlay states
   const [isCreateOpen, setIsCreateOpen] = useState(false);
@@ -603,8 +604,9 @@ export const LeadsPage = () => {
     },
     {
       header: '#',
+      className: 'whitespace-nowrap',
       cell: (row, i) => (
-        <span className="text-[11px] text-slate-400 font-semibold font-mono">
+        <span className="text-[11px] text-slate-400 font-semibold font-mono whitespace-nowrap">
           {(page - 1) * pagination.limit + i + 1}
         </span>
       )
@@ -612,6 +614,7 @@ export const LeadsPage = () => {
     {
       header: 'Lead ID',
       accessorKey: 'leadNumber',
+      className: 'whitespace-nowrap',
       cell: (row) => (
         <span
           onClick={() => setSelectedLeadForView(row)}
@@ -626,13 +629,14 @@ export const LeadsPage = () => {
       header: 'Lead Name',
       sortable: true,
       accessorKey: 'name',
+      className: 'whitespace-nowrap',
       cell: (row) => (
-        <div className="min-w-0">
-          <p className="text-[13px] font-bold text-slate-900 hover:text-primary transition-colors cursor-pointer" onClick={() => setSelectedLeadForView(row)}>
+        <div className="min-w-0 whitespace-nowrap">
+          <p className="text-[13px] font-bold text-slate-900 hover:text-primary transition-colors cursor-pointer whitespace-nowrap" onClick={() => setSelectedLeadForView(row)}>
             {row.name}
           </p>
           {row.email ? (
-            <p className="text-[11px] text-slate-400 mt-0.5 font-medium truncate max-w-[200px]">
+            <p className="text-[11px] text-slate-400 mt-0.5 font-medium whitespace-nowrap">
               {row.email}
             </p>
           ) : null}
@@ -641,48 +645,86 @@ export const LeadsPage = () => {
     },
     {
       header: 'Mobile',
+      className: 'whitespace-nowrap',
       cell: (row) => (
-        <div className="text-[12px] font-semibold text-slate-700">
-          <p>{row.mobile}</p>
+        <div className="text-[12px] font-semibold text-slate-700 whitespace-nowrap">
+          <p className="whitespace-nowrap">{row.mobile}</p>
           {row.alternateMobile ? (
-            <p className="text-[10px] text-slate-400 font-medium">Alt: {row.alternateMobile}</p>
+            <p className="text-[10px] text-slate-400 font-medium whitespace-nowrap">Alt: {row.alternateMobile}</p>
           ) : null}
         </div>
       )
     },
     {
       header: 'Source',
+      className: 'whitespace-nowrap',
       cell: (row) => (
-        <span className="inline-flex items-center gap-1 text-[12px] font-semibold text-slate-600 bg-slate-100/80 px-2 py-0.5 rounded-lg border border-slate-200/50">
-          <Compass size={11} className="text-slate-400" />
-          {row.source?.name || '—'}
+        <span className="inline-flex items-center gap-1 text-[12px] font-semibold text-slate-600 bg-slate-100/80 px-2 py-0.5 rounded-lg border border-slate-200/50 whitespace-nowrap">
+          <Compass size={11} className="text-slate-400 shrink-0" />
+          <span className="whitespace-nowrap">{row.source?.name || '—'}</span>
         </span>
       )
     },
     {
       header: 'Service',
+      className: 'whitespace-nowrap',
       cell: (row) => (
-        <span className="inline-flex items-center gap-1 text-[12px] font-semibold text-slate-600 bg-slate-100/80 px-2 py-0.5 rounded-lg border border-slate-200/50">
-          <Award size={11} className="text-slate-400" />
-          {row.course?.name || '—'}
+        <span className="inline-flex items-center gap-1 text-[12px] font-semibold text-slate-600 bg-slate-100/80 px-2 py-0.5 rounded-lg border border-slate-200/50 whitespace-nowrap">
+          <Award size={11} className="text-slate-400 shrink-0" />
+          <span className="whitespace-nowrap">{row.course?.name || '—'}</span>
         </span>
       )
     },
     {
+      header: 'Budget',
+      sortable: true,
+      accessorKey: 'budget',
+      className: 'whitespace-nowrap',
+      cell: (row) => (
+        <span className="inline-flex items-center text-[12px] font-bold font-mono text-emerald-600 bg-emerald-50/70 border border-emerald-200/60 px-2 py-0.5 rounded-lg whitespace-nowrap">
+          {row.budget ? formatCurrency(row.budget) : '—'}
+        </span>
+      )
+    },
+    {
+      header: 'Kanban Stage',
+      sortable: true,
+      accessorKey: 'stageId',
+      className: 'whitespace-nowrap',
+      cell: (row) => {
+        if (!row.stage) return <span className="text-slate-400 text-[12px] whitespace-nowrap">—</span>;
+        const color = row.stage.colorCode || '#474ce1';
+        return (
+          <span
+            className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold border whitespace-nowrap"
+            style={{
+              backgroundColor: `${color}14`,
+              color: color,
+              borderColor: `${color}35`
+            }}
+          >
+            <Tag size={10} className="shrink-0" />
+            <span>{row.stage.name}</span>
+          </span>
+        );
+      }
+    },
+    {
       header: 'Status',
+      className: 'whitespace-nowrap',
       cell: (row) => {
         if ((row.opportunities && row.opportunities.length > 0) || row.isConverted) {
           return (
-            <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 whitespace-nowrap">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
               CONVERTED
             </span>
           );
         }
-        if (!row.status) return <span className="text-slate-400 text-[12px]">—</span>;
+        if (!row.status) return <span className="text-slate-400 text-[12px] whitespace-nowrap">—</span>;
         return (
           <span
-            className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold border"
+            className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold border whitespace-nowrap"
             style={{
               backgroundColor: row.status.displayColor + '16',
               color: row.status.displayColor,
@@ -699,6 +741,7 @@ export const LeadsPage = () => {
       header: 'Priority',
       sortable: true,
       accessorKey: 'priority',
+      className: 'whitespace-nowrap',
       cell: (row) => {
         const priorityColors = {
           HIGH: 'text-red-700 bg-red-50 border-red-200/50',
@@ -707,36 +750,37 @@ export const LeadsPage = () => {
         };
         const style = priorityColors[row.priority] || priorityColors.MEDIUM;
         return (
-          <span className={`inline-flex items-center gap-1 text-[11px] font-bold px-2.5 py-0.5 rounded-full border ${style}`}>
-            <ShieldAlert size={10} />
-            {row.priority || 'MEDIUM'}
+          <span className={`inline-flex items-center gap-1 text-[11px] font-bold px-2.5 py-0.5 rounded-full border whitespace-nowrap ${style}`}>
+            <ShieldAlert size={10} className="shrink-0" />
+            <span className="whitespace-nowrap">{row.priority || 'MEDIUM'}</span>
           </span>
         );
       }
     },
     {
       header: 'Assigned To',
+      className: 'whitespace-nowrap',
       cell: (row) => {
         if (row.assignedTo) {
           const roleName = row.assignedTo.userRoles?.[0]?.role?.name || row.assignedTo.primaryRole || 'Sales Rep';
           return (
-            <span className="inline-flex items-center gap-1.5 text-[12px] font-bold text-slate-700">
-              <User size={12} className="text-slate-400" />
-              <span>Person: {row.assignedTo.name} ({roleName})</span>
+            <span className="inline-flex items-center gap-1.5 text-[12px] font-bold text-slate-700 whitespace-nowrap">
+              <User size={12} className="text-slate-400 shrink-0" />
+              <span className="whitespace-nowrap">Person: {row.assignedTo.name} ({roleName})</span>
             </span>
           );
         } else if (row.team) {
           return (
-            <span className="inline-flex items-center gap-1.5 text-[12px] font-bold text-orange-600">
-              <Users size={12} className="text-orange-400" />
-              <span>Team: {row.team.name}</span>
+            <span className="inline-flex items-center gap-1.5 text-[12px] font-bold text-orange-600 whitespace-nowrap">
+              <Users size={12} className="text-orange-400 shrink-0" />
+              <span className="whitespace-nowrap">Team: {row.team.name}</span>
             </span>
           );
         }
         return (
-          <span className="inline-flex items-center gap-1.5 text-[12px] font-medium text-slate-400 italic">
-            <HelpCircle size={12} className="text-slate-300" />
-            <span>Unassigned</span>
+          <span className="inline-flex items-center gap-1.5 text-[12px] font-medium text-slate-400 italic whitespace-nowrap">
+            <HelpCircle size={12} className="text-slate-300 shrink-0" />
+            <span className="whitespace-nowrap">Unassigned</span>
           </span>
         );
       }
@@ -745,18 +789,20 @@ export const LeadsPage = () => {
       header: 'Created',
       sortable: true,
       accessorKey: 'createdAt',
+      className: 'whitespace-nowrap',
       cell: (row) => (
-        <span className="inline-flex items-center gap-1 text-[12px] font-semibold text-slate-500">
-          <Calendar size={11} className="text-slate-400" />
-          {formatDate(row.createdAt)}
+        <span className="inline-flex items-center gap-1 text-[12px] font-semibold text-slate-500 whitespace-nowrap">
+          <Calendar size={11} className="text-slate-400 shrink-0" />
+          <span className="whitespace-nowrap">{formatDate(row.createdAt)}</span>
         </span>
       )
     },
     {
       header: 'Actions',
       align: 'right',
+      className: 'whitespace-nowrap',
       cell: (row) => (
-        <div className="flex items-center justify-end gap-1">
+        <div className="flex items-center justify-end gap-1 whitespace-nowrap">
           <RowActionsMenu
             row={row}
             onViewDetails={setSelectedLeadForView}
@@ -774,30 +820,14 @@ export const LeadsPage = () => {
   ];
 
   return (
-    <div className=" max-w-7xl mx-auto space-y-4 animate-in fade-in duration-300">
-      {/* Page Header */}
-      <PageHeader
-        title="Leads Registry"
-        description="Capture, track, and convert leads."
-        icon={ClipboardList}
-        iconClassName="bg-orange-50 text-orange-600 border border-orange-100"
-        actions={
-          <button
-            type="button"
-            onClick={() => refetch()}
-            className="text-slate-400 hover:text-orange-500 transition-colors focus:outline-none cursor-pointer p-2"
-            title="Refresh Data"
-          >
-            <RefreshCw size={14} className={isFetching ? 'animate-spin' : ''} />
-          </button>
-        }
-      />
+    <div className=" max-w-[2500px] mx-auto space-y-4 animate-in fade-in duration-300">
+      
 
 
 
       <section className="space-y-4">
         {/* Toolbar Filter Panel */}
-        <div className="bg-white border border-slate-200 p-4">
+        <div className="">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div className="flex-1 min-w-[260px] w-full sm:w-auto">
               <SearchInput
@@ -807,6 +837,15 @@ export const LeadsPage = () => {
                 className="w-full"
               />
             </div>
+
+            <button
+              type="button"
+              onClick={() => refetch()}
+              className="text-slate-400 hover:text-orange-500 transition-colors focus:outline-none cursor-pointer p-2"
+              title="Refresh Data"
+            >
+              <RefreshCw size={14} className={isFetching ? 'animate-spin' : ''} />
+            </button>
 
             <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto">
               {savedFiltersList.length > 0 && (
@@ -863,8 +902,8 @@ export const LeadsPage = () => {
               <button
                 onClick={() => setIsFilterOpen(true)}
                 className={`flex items-center gap-2 px-4 h-11 border rounded-xl text-sm font-semibold transition-all cursor-pointer ${hasActiveFilters
-                    ? 'border-orange-200 bg-orange-50/50 text-orange-600 hover:bg-orange-100/60'
-                    : 'border-slate-200 text-slate-600 hover:bg-slate-50'
+                  ? 'border-orange-200 bg-orange-50/50 text-orange-600 hover:bg-orange-100/60'
+                  : 'border-slate-200 text-slate-600 hover:bg-slate-50'
                   }`}
               >
                 <SlidersHorizontal size={15} />
@@ -1223,8 +1262,8 @@ export const LeadsPage = () => {
           )}
 
           {/* Business Filters */}
-          <div className="space-y-4">
             <h3 className="text-xs font-bold uppercase tracking-wider text-orange-500">Business Segmentation</h3>
+          <div className="space-y-4 grid grid-cols-2 gap-2">
             <SelectField
               id="drawer-filter-source"
               label="Lead Source"
