@@ -1,67 +1,44 @@
-name: CRM Web Production CI/CD
+name: stage-ci-pipeline
 
 on:
-  push:
-    branches:
-      - main
-      - dev
+  workflow_dispatch:
 
-env:
-  REGISTRY: ghcr.io
+permissions:
+  contents: write
+  actions: write
+
 
 jobs:
-  build-and-push-image:
+  build:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+      - name: Login Dockerhub
+        env:
+          STACKDOT_DOCKER_USERNAME: ${{secrets.STACKDOT_DOCKER_USERNAME}}
+          STACKDOT_DOCKER_PASSWORD: ${{secrets.STACKDOT_DOCKER_PASSWORD}}
+        run: docker login -u $STACKDOT_DOCKER_USERNAME -p $STACKDOT_DOCKER_PASSWORD
 
-      - name: Set lowercase image name
-        run: echo "IMAGE_NAME=${GITHUB_REPOSITORY,,}" >> $GITHUB_ENV
+      - name: Build the Docker image
+        run: docker build -t jeeejagani/crm-web .
+      - name: Push to Dockerhub
+        run: docker push jeeejagani/crm-web
+      - name: Change tag and push it to dockerhub   
+        run: | 
+          current_date=$(date "+%d.%m.%y.%H.%M.%S.%3N")
+          docker tag jeeejagani/crm-web jeeejagani/crm-web:$current_date
+          docker push jeeejagani/crm-web:$current_date
 
-      - name: Log in to the Container registry
-        uses: docker/login-action@v3
-        with:
-          registry: ${{ env.REGISTRY }}
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Extract metadata (tags, labels)
-        id: meta
-        uses: docker/metadata-action@v5
-        with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-          flavor: |
-            latest=true
-          tags: |
-            type=raw,value=latest
-            type=sha,format=short
-
-      - name: Build and push Docker image
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
-
-  deploy:
-    runs-on: ubuntu-latest
-    needs: build-and-push-image
-    steps:
-      - name: Deploy to Server via SSH
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ secrets.SERVER_HOST }}
-          username: ${{ secrets.SERVER_USERNAME }}
-          password: ${{ secrets.SERVER_PASSWORD }}
-          port: ${{ secrets.SERVER_PORT || 22 }}
-          script: |
-            cd /home/sddev/stackdot-crm
-            docker-compose pull crm-web
-            docker-compose up -d crm-web
-
+      - name: Deploy to Ubuntu Server
+        env:
+          SERVER_IP: ${{ secrets.SERVER_IP }}
+          SERVER_USERNAME: ${{ secrets.SERVER_USERNAME }}
+          SERVER_PASSWORD: ${{ secrets.SERVER_PASSWORD }}
+        run: |
+          sshpass -p "$SERVER_PASSWORD" ssh -o StrictHostKeyChecking=no $SERVER_USERNAME@$SERVER_IP << 'EOF'
+            cd ~/stackdot-crm
+            docker compose pull
+            docker compose up -d
+            docker system prune -f
+          EOF
